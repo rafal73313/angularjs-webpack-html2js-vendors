@@ -1,6 +1,4 @@
 var path = require('path');
-var glob = require('glob')
-
 
 const build = {
     cache: true,
