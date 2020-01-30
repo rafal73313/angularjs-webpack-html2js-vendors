@@ -1,9 +1,10 @@
-const waCounterController = function ($scope) {
+const waCounterController = function ($scope, $window) {
 
     $scope.count = 0;
 
     $scope.increment = function() {
         $scope.count = $scope.count + 1;
+        jQuery('body').css('background-color', 'yellow');
     }
 
     $scope.decrement = function() {

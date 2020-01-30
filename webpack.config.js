@@ -1,4 +1,5 @@
 var path = require('path');
+var webpack = require('webpack');
 
 const build = {
     cache: true,
@@ -7,6 +8,7 @@ const build = {
         main: './index.js',
         vendor: [
             'angular',
+            'jquery',
             path.join(__dirname, '/dist/temp/wa.template.cache.js')
           ]
     },
@@ -35,7 +37,14 @@ const build = {
                 ]
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.ProvidePlugin({
+            "window.jQuery": "jquery",
+            "$": "jquery",
+            "jQuery": "jquery"
+        }),
+    ]
 }
 
 module.exports = {

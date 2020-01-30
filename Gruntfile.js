@@ -59,6 +59,12 @@ module.exports = function(grunt) {
                   'dist/bundle.final.js': ['dist/temp/vendor.js', 'dist/temp/main.js']
                 },
             }
+        },
+
+        clean: {
+            main: {
+                src: ['./dist']
+            }
         }
     })
 
@@ -67,8 +73,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-html2js');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('default', [
+        'clean',
         'html2js',
         'webpack:build',
         'concat',
