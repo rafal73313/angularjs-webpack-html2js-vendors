@@ -1,4 +1,5 @@
 const waCounterController = function ($scope, $window) {
+    "ngInject"
 
     $scope.count = 0;
 

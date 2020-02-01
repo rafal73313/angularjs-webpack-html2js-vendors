@@ -1,7 +1,9 @@
 var path = require('path');
 var webpack = require('webpack');
+var glob = require('glob');
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-const build = {
+const main_build = {
     cache: true,
     mode: 'development',
     entry: {
@@ -9,11 +11,12 @@ const build = {
         vendor: [
             'angular',
             'jquery',
-            path.join(__dirname, '/dist/temp/wa.template.cache.js')
+            path.join(__dirname, '/dist/tmp/wa.template.cache.js'),
+            path.join(__dirname, '/dist/tmp/headings.config.bundle.js')
           ]
     },
     output: {
-        path: path.join(__dirname, '/dist/temp'),
+        path: path.join(__dirname, '/dist/final'),
         filename: '[name].js',
         chunkFilename: '[chunkhash].js'
     },
@@ -30,7 +33,7 @@ const build = {
                 use: [{
                         loader: 'babel-loader',
                         options: {
-                            presets: ['@babel/env'],
+                            presets: ['@babel/preset-env'],
                             plugins: ['babel-plugin-angularjs-annotate']
                         }
                     }
@@ -47,6 +50,42 @@ const build = {
     ]
 }
 
+const headings_build = {
+    mode: 'production',
+    entry: {
+        main: glob.sync('*.js', {
+            cwd: path.join(__dirname, "/src"), 
+            // ignore: ['headings/*.js', 'headings/**/*.js'],
+            root: '/',
+            matchBase: true,
+            realpath: true
+        }),
+        vendor: [
+            'jquery',
+            'angular'
+        ]
+    },
+    output: {
+        path: path.join(__dirname, '/dist/tmp_headings_webpack/'),
+        filename: '[name].headings.config.webpack.js'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                options: {
+                    presets: ['@babel/env'],
+                    plugins: [['babel-plugin-angularjs-annotate', {explicitOnly: true}]]
+                }
+            }
+        ]
+    },
+    plugins: [
+        new UglifyJsPlugin()
+    ]
+}
 module.exports = {
-    build
+    main_build, headings_build
 }
